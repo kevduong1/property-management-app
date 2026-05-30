@@ -1,56 +1,59 @@
-import {
-  Building2,
-  FileText,
-  Home,
-  LayoutDashboard,
-  Layers,
-  Receipt,
-  Settings,
-  Wallet,
-  Wrench,
-  Users,
-  FileSignature,
-  DoorOpen,
-  BarChart3,
-} from "lucide-react";
 import type { Role } from "@/db/schema";
 import { isStaff } from "@/lib/rbac";
+
+/**
+ * Nav items carry an `icon` *key* (string), not a component, so they can be
+ * passed from server components into the client <SidebarNav> without crossing
+ * the serialization boundary. The key is resolved to a Lucide icon inside
+ * sidebar-nav.tsx (a client component).
+ */
+export type IconKey =
+  | "dashboard"
+  | "parentLlc"
+  | "series"
+  | "properties"
+  | "units"
+  | "tenants"
+  | "leases"
+  | "rent"
+  | "expenses"
+  | "maintenance"
+  | "documents"
+  | "reports"
+  | "settings"
+  | "home"
+  | "lease";
 
 export interface NavItem {
   href: string;
   label: string;
-  icon: typeof Home;
+  icon: IconKey;
   /** Roles allowed to see this nav item. Defaults to all staff. */
   roles?: Role[];
 }
 
 export const STAFF_NAV: NavItem[] = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/parent-llc", label: "Parent LLC", icon: Building2 },
-  { href: "/series", label: "Child Series", icon: Layers },
-  { href: "/properties", label: "Properties", icon: Home },
-  { href: "/units", label: "Units", icon: DoorOpen },
-  { href: "/tenants", label: "Tenants", icon: Users },
-  { href: "/leases", label: "Leases", icon: FileSignature },
-  { href: "/rent", label: "Rent", icon: Wallet },
-  { href: "/expenses", label: "Expenses", icon: Receipt },
-  { href: "/maintenance", label: "Maintenance", icon: Wrench },
-  { href: "/documents", label: "Documents", icon: FileText },
-  { href: "/reports", label: "Reports", icon: BarChart3 },
-  {
-    href: "/settings",
-    label: "Settings",
-    icon: Settings,
-    roles: ["owner"],
-  },
+  { href: "/dashboard", label: "Dashboard", icon: "dashboard" },
+  { href: "/parent-llc", label: "Parent LLC", icon: "parentLlc" },
+  { href: "/series", label: "Child Series", icon: "series" },
+  { href: "/properties", label: "Properties", icon: "properties" },
+  { href: "/units", label: "Units", icon: "units" },
+  { href: "/tenants", label: "Tenants", icon: "tenants" },
+  { href: "/leases", label: "Leases", icon: "leases" },
+  { href: "/rent", label: "Rent", icon: "rent" },
+  { href: "/expenses", label: "Expenses", icon: "expenses" },
+  { href: "/maintenance", label: "Maintenance", icon: "maintenance" },
+  { href: "/documents", label: "Documents", icon: "documents" },
+  { href: "/reports", label: "Reports", icon: "reports" },
+  { href: "/settings", label: "Settings", icon: "settings", roles: ["owner"] },
 ];
 
 export const TENANT_NAV: NavItem[] = [
-  { href: "/portal", label: "My Home", icon: Home },
-  { href: "/portal/lease", label: "Lease", icon: FileSignature },
-  { href: "/portal/rent", label: "Rent & Balance", icon: Wallet },
-  { href: "/portal/documents", label: "Documents", icon: FileText },
-  { href: "/portal/maintenance", label: "Maintenance", icon: Wrench },
+  { href: "/portal", label: "My Home", icon: "home" },
+  { href: "/portal/lease", label: "Lease", icon: "lease" },
+  { href: "/portal/rent", label: "Rent & Balance", icon: "rent" },
+  { href: "/portal/documents", label: "Documents", icon: "documents" },
+  { href: "/portal/maintenance", label: "Maintenance", icon: "maintenance" },
 ];
 
 export function navForRole(role: Role): NavItem[] {
