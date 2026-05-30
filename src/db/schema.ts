@@ -137,8 +137,8 @@ export const entityTypeEnum = pgEnum('entity_type', [
 export const organizations = pgTable('organizations', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: text('name').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 });
 
 /**
@@ -154,8 +154,8 @@ export const users = pgTable('users', {
   fullName: text('full_name'),
   phone: text('phone'),
   avatarUrl: text('avatar_url'),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 });
 
 /**
@@ -173,7 +173,7 @@ export const userRoles = pgTable(
       .references(() => organizations.id, { onDelete: 'cascade' })
       .notNull(),
     role: userRoleEnum('role').notNull().default('manager'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [
     uniqueIndex('user_roles_user_org_role_uq').on(t.userId, t.organizationId, t.role),
@@ -197,8 +197,8 @@ export const parentLlcs = pgTable(
     ein: varchar('ein', { length: 32 }),
     formationState: varchar('formation_state', { length: 64 }),
     notes: text('notes'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [index('parent_llcs_org_idx').on(t.organizationId)],
 );
@@ -218,8 +218,8 @@ export const childSeries = pgTable(
     status: seriesStatusEnum('status').notNull().default('active'),
     ein: varchar('ein', { length: 32 }),
     bankAccountNickname: text('bank_account_nickname'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [
     index('child_series_parent_idx').on(t.parentLlcId),
@@ -250,8 +250,8 @@ export const properties = pgTable(
     postalCode: varchar('postal_code', { length: 16 }),
     status: propertyStatusEnum('status').notNull().default('active'),
     notes: text('notes'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [
     index('properties_series_idx').on(t.childSeriesId),
@@ -281,8 +281,8 @@ export const units = pgTable(
     bathrooms: numeric('bathrooms', { precision: 4, scale: 1 }),
     squareFeet: integer('square_feet'),
     notes: text('notes'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [
     index('units_property_idx').on(t.propertyId),
@@ -308,8 +308,8 @@ export const tenants = pgTable(
     emergencyContactName: text('emergency_contact_name'),
     emergencyContactPhone: text('emergency_contact_phone'),
     notes: text('notes'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [index('tenants_org_idx').on(t.organizationId)],
 );
@@ -331,7 +331,7 @@ export const tenantUserLinks = pgTable(
     organizationId: uuid('organization_id')
       .references(() => organizations.id, { onDelete: 'cascade' })
       .notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [
     uniqueIndex('tenant_user_links_tenant_user_uq').on(t.tenantId, t.userId),
@@ -371,8 +371,8 @@ export const leases = pgTable(
     status: leaseStatusEnum('status').notNull().default('active'),
     documentId: uuid('document_id'), // uploaded lease document (FK added in relations)
     notes: text('notes'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [
     index('leases_tenant_idx').on(t.tenantId),
@@ -417,8 +417,8 @@ export const rentCharges = pgTable(
     // Status is derived (paid/unpaid/partial/late) but stored for fast filtering.
     status: rentChargeStatusEnum('status').notNull().default('unpaid'),
     notes: text('notes'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [
     index('rent_charges_tenant_idx').on(t.tenantId),
@@ -453,8 +453,8 @@ export const rentPayments = pgTable(
     // Placeholders for future Stripe / ACH integration (not used in MVP).
     externalProcessor: text('external_processor'),
     externalPaymentId: text('external_payment_id'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [
     index('rent_payments_charge_idx').on(t.rentChargeId),
@@ -488,8 +488,8 @@ export const securityDeposits = pgTable(
     refundAmount: numeric('refund_amount', { precision: 12, scale: 2 }).default('0'),
     refundDate: date('refund_date'),
     notes: text('notes'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [
     index('security_deposits_tenant_idx').on(t.tenantId),
@@ -515,7 +515,7 @@ export const expenseCategories = pgTable(
     isDefault: boolean('is_default').notNull().default(false),
     // Hint for future Schedule E / tax export mapping.
     taxLine: text('tax_line'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [index('expense_categories_org_idx').on(t.organizationId)],
 );
@@ -532,8 +532,8 @@ export const vendors = pgTable(
     email: text('email'),
     phone: text('phone'),
     notes: text('notes'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [index('vendors_org_idx').on(t.organizationId)],
 );
@@ -566,8 +566,8 @@ export const expenses = pgTable(
     // Future-proofing for bank sync / reconciliation.
     isReconciled: boolean('is_reconciled').notNull().default(false),
     externalTransactionId: text('external_transaction_id'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [
     index('expenses_series_idx').on(t.childSeriesId),
@@ -607,8 +607,8 @@ export const documents = pgTable(
     // Whether a tenant linked to the entity may view this document.
     sharedWithTenant: boolean('shared_with_tenant').notNull().default(false),
     uploadedBy: uuid('uploaded_by').references(() => users.id, { onDelete: 'set null' }),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [
     index('documents_entity_idx').on(t.entityType, t.entityId),
@@ -631,8 +631,8 @@ export const notes = pgTable(
     entityId: uuid('entity_id'),
     body: text('body').notNull(),
     createdBy: uuid('created_by').references(() => users.id, { onDelete: 'set null' }),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [
     index('notes_entity_idx').on(t.entityType, t.entityId),
@@ -665,9 +665,9 @@ export const maintenanceRequests = pgTable(
     status: maintenanceStatusEnum('status').notNull().default('open'),
     notes: text('notes'),
     createdBy: uuid('created_by').references(() => users.id, { onDelete: 'set null' }),
-    completedAt: timestamp('completed_at', { withTimezone: true }),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    completedAt: timestamp('completed_at', { withTimezone: true, mode: 'string' }),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
   },
   (t) => [
     index('maintenance_series_idx').on(t.childSeriesId),
